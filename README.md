@@ -1,3 +1,4 @@
 # nvim
-对[https://nvchad.com/]Nvchad拙劣的模仿(抄)
-neovim custom configration
++ neovim custom configration
+对[Nvchad](https://nvchad.com/)拙劣的模仿(抄)
+
