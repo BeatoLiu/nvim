@@ -15,12 +15,16 @@ local default_plugins = {
   {
     "nvim-lualine/lualine.nvim",
     dependencies = "nvim-tree/nvim-web-devicons",
-    config = function()
-      require("lualine").setup({
-        options = {
-          theme = "tokyonight",
-        },
-      })
+    opts = function()
+      return require("plugins.lualine")
+    end,
+    config = function(_, opts)
+      require("lualine").setup(
+        -- options = {
+        --   theme = "tokyonight",
+        -- },
+        opts
+      )
     end,
   },
   {
