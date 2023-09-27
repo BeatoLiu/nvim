@@ -1,7 +1,6 @@
 -- Eviline config for lualine
 -- Author: shadmansaleh
 -- Credit: glepnir
--- local lualine = require('lualine')
 
 -- Color table for highlights
 -- stylua: ignore
@@ -17,7 +16,7 @@ local colors = {
   magenta  = '#c678dd',
   blue     = '#51afef',
   red      = '#ec5f67',
-  vimGreen = '#007f00',
+  vimGreen = '#007f00'
 }
 
 local conditions = {
@@ -40,15 +39,13 @@ local config = {
     -- Disable sections and component separators
     component_separators = "",
     section_separators = "",
-    -- theme = {
-    -- We are going to use lualine_c an lualine_x as left and
-    -- right section. Both are highlighted by c theme .  So we
-    -- are just setting default looks o statusline
-
-    -- normal = { c = { fg = colors.fg, bg = colors.bg } },
-    -- inactive = { c = { fg = colors.fg, bg = colors.bg } },
-    -- },
-    theme = "tokyonight",
+    theme = {
+      -- We are going to use lualine_c an lualine_x as left and
+      -- right section. Both are highlighted by c theme .  So we
+      -- are just setting default looks o statusline
+      normal = { c = { fg = colors.fg, bg = colors.bg } },
+      inactive = { c = { fg = colors.fg, bg = colors.bg } },
+    },
   },
   sections = {
     -- these are to remove the defaults
@@ -81,19 +78,31 @@ local function ins_right(component)
   table.insert(config.sections.lualine_x, component)
 end
 
+local function search_result()
+  if vim.v.hlsearch == 0 then
+    return ""
+  end
+  local last_search = vim.fn.getreg("/")
+  if not last_search or last_search == "" then
+    return ""
+  end
+  local searchcount = vim.fn.searchcount({ maxcount = 9999 })
+  return last_search .. "(" .. searchcount.current .. "/" .. searchcount.total .. ")"
+end
+
 ins_left({
   function()
-    -- return "▊"
+    -- return '▊'
     return ""
   end,
-  color = { fg = colors.vimGreen },     -- Sets highlighting of component
+  color = { fg = colors.vimGreen }, -- Sets highlighting of component
   padding = { left = 0, right = 1 }, -- We don't need space before this
 })
 
 ins_left({
   -- mode component
   function()
-    -- return ""
+    -- return ''
     return string.upper(vim.fn.mode())
   end,
   color = function()
@@ -124,23 +133,23 @@ ins_left({
   end,
   padding = { right = 1 },
 })
-
 ins_left({
-  -- filesize component
-  "filesize",
-  cond = conditions.buffer_not_empty,
+  "branch",
+  icon = "",
+  color = { fg = colors.violet, gui = "bold" },
 })
 
 ins_left({
-  "filename",
-  -- path = 1,
-  cond = conditions.buffer_not_empty,
-  color = { fg = colors.magenta, gui = "bold" },
+  "diff",
+  -- Is it me or the symbol for modified us really weird
+  symbols = { added = " ", modified = "󰝤 ", removed = " " },
+  diff_color = {
+    added = { fg = colors.green },
+    modified = { fg = colors.orange },
+    removed = { fg = colors.red },
+  },
+  cond = conditions.hide_in_width,
 })
-
-ins_left({ "location" })
-
-ins_left({ "progress", color = { fg = colors.fg, gui = "bold" } })
 
 ins_left({
   "diagnostics",
@@ -160,29 +169,39 @@ ins_left({
     return "%="
   end,
 })
-
 ins_left({
-  -- Lsp server name .
-  function()
-    local msg = "No Active Lsp"
-    local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-    local clients = vim.lsp.get_clients()
-    if next(clients) == nil then
-      return msg
-    end
-    for _, client in ipairs(clients) do
-      local filetypes = client.config.filetypes
-      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-        return client.name
-      end
-    end
-    return msg
-  end,
-  icon = " LSP:",
-  color = { fg = colors.cyan, gui = "bold" },
+  "filename",
+  cond = conditions.buffer_not_empty,
+  color = { fg = colors.magenta, gui = "bold" },
+  path = 1,
 })
 
+-- ins_left {
+--   -- Lsp server name .
+--   function()
+--     local msg = 'No Active Lsp'
+--     local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+--     local clients = vim.lsp.get_active_clients()
+--     if next(clients) == nil then
+--       return msg
+--     end
+--     for _, client in ipairs(clients) do
+--       local filetypes = client.config.filetypes
+--       if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+--         return client.name
+--       end
+--     end
+--     return msg
+--   end,
+--   icon = ' LSP:',
+--   color = { fg = '#ffffff', gui = 'bold' },
+-- }
+
 -- Add components to right sections
+ins_right({
+  "filetype",
+  search_result,
+})
 ins_right({
   "o:encoding",      -- option component same as &encoding in viml
   fmt = string.upper, -- I'm not sure why it's upper case either ;)
@@ -196,34 +215,22 @@ ins_right({
   icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
   color = { fg = colors.green, gui = "bold" },
 })
-
 ins_right({
-  "branch",
-  icon = "",
-  color = { fg = colors.violet, gui = "bold" },
+  -- filesize component
+  "filesize",
+  cond = conditions.buffer_not_empty,
 })
 
-ins_right({
-  "diff",
-  -- Is it me or the symbol for modified us really weird
-  symbols = { added = " ", modified = "󰝤 ", removed = " " },
-  diff_color = {
-    added = { fg = colors.green },
-    modified = { fg = colors.orange },
-    removed = { fg = colors.red },
-  },
-  cond = conditions.hide_in_width,
-})
+ins_right({ "location" })
 
-ins_right({
-  function()
-    return "▊"
-  end,
-  color = { fg = colors.blue },
-  padding = { left = 1 },
-})
+ins_right({ "progress", color = { fg = colors.fg, gui = "bold" } })
 
+-- ins_right {
+--   function()
+--     return '▊'
+--   end,
+--   color = { fg = colors.blue },
+--   padding = { left = 1 },
+-- }
 return config
-
 -- Now don't forget to initialize lualine
--- lualine.setup(config)
