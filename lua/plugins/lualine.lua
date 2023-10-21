@@ -39,6 +39,8 @@ local config = {
     -- Disable sections and component separators
     component_separators = "",
     section_separators = "",
+    -- section_separators = { left = '', right = '' },
+    -- component_separators = { left = '', right = '' },
     theme = {
       -- We are going to use lualine_c an lualine_x as left and
       -- right section. Both are highlighted by c theme .  So we
@@ -78,17 +80,17 @@ local function ins_right(component)
   table.insert(config.sections.lualine_x, component)
 end
 
-local function search_result()
-  if vim.v.hlsearch == 0 then
-    return ""
-  end
-  local last_search = vim.fn.getreg("/")
-  if not last_search or last_search == "" then
-    return ""
-  end
-  local searchcount = vim.fn.searchcount({ maxcount = 9999 })
-  return last_search .. "(" .. searchcount.current .. "/" .. searchcount.total .. ")"
-end
+-- local function search_result()
+--   if vim.v.hlsearch == 0 then
+--     return ""
+--   end
+--   local last_search = vim.fn.getreg("/")
+--   if not last_search or last_search == "" then
+--     return ""
+--   end
+--   local searchcount = vim.fn.searchcount({ maxcount = 9999 })
+--   return last_search .. "(" .. searchcount.current .. "/" .. searchcount.total .. ")"
+-- end
 
 ins_left({
   function()
@@ -135,14 +137,15 @@ ins_left({
 })
 ins_left({
   "branch",
-  icon = "",
+  -- icon = "",
   color = { fg = colors.violet, gui = "bold" },
 })
 
 ins_left({
   "diff",
   -- Is it me or the symbol for modified us really weird
-  symbols = { added = " ", modified = "󰝤 ", removed = " " },
+  -- symbols = { added = " ", modified = "󰝤 ", removed = " " },
+  symbols = { added = "+", modified = "~", removed = "-" },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },
@@ -150,17 +153,12 @@ ins_left({
   },
   cond = conditions.hide_in_width,
 })
-
-ins_left({
-  "diagnostics",
-  sources = { "nvim_diagnostic" },
-  symbols = { error = " ", warn = " ", info = " " },
-  diagnostics_color = {
-    color_error = { fg = colors.red },
-    color_warn = { fg = colors.yellow },
-    color_info = { fg = colors.cyan },
-  },
-})
+-- ins_left({
+--   function()
+--     return "▊"
+--   end,
+--   color = { fg = colors.fg },
+-- })
 
 -- Insert mid section. You can make any number of sections in neovim :)
 -- for lualine it's any number greater then 2
@@ -174,6 +172,16 @@ ins_left({
   cond = conditions.buffer_not_empty,
   color = { fg = colors.magenta, gui = "bold" },
   path = 1,
+})
+ins_left({
+  "diagnostics",
+  sources = { "nvim_diagnostic" },
+  symbols = { error = " ", warn = " ", info = " " },
+  diagnostics_color = {
+    color_error = { fg = colors.red },
+    color_warn = { fg = colors.yellow },
+    color_info = { fg = colors.cyan },
+  },
 })
 
 -- ins_left {
@@ -200,7 +208,8 @@ ins_left({
 -- Add components to right sections
 ins_right({
   "filetype",
-  search_result,
+  icon_only = true,
+  -- search_result,
 })
 ins_right({
   "o:encoding",      -- option component same as &encoding in viml
@@ -211,8 +220,8 @@ ins_right({
 
 ins_right({
   "fileformat",
-  fmt = string.upper,
-  icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
+  -- fmt = string.upper,
+  -- icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
   color = { fg = colors.green, gui = "bold" },
 })
 ins_right({

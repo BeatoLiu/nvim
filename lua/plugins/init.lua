@@ -8,8 +8,14 @@ local default_plugins = {
     "akinsho/bufferline.nvim",
     version = "*",
     dependencies = "nvim-tree/nvim-web-devicons",
-    config = function()
-      require("bufferline").setup({})
+    init = function()
+      require("utils").load_mappings("bufferline")
+    end,
+    opts = function()
+      return require("plugins.bufferline")
+    end,
+    config = function(_, opts)
+      require("bufferline").setup({ options = opts })
     end,
   },
   {
@@ -19,12 +25,7 @@ local default_plugins = {
       return require("plugins.lualine")
     end,
     config = function(_, opts)
-      require("lualine").setup(
-        -- options = {
-        --   theme = "tokyonight",
-        -- },
-        opts
-      )
+      require("lualine").setup(opts)
     end,
   },
   {
@@ -112,13 +113,6 @@ local default_plugins = {
     end,
     config = function(_, opts)
       require("mason").setup(opts)
-
-      -- custom nvchad cmd to install all mason binaries listed
-      vim.api.nvim_create_user_command("MasonInstallAll", function()
-        vim.cmd("MasonInstall " .. table.concat(opts.ensure_installed, " "))
-      end, {})
-
-      vim.g.mason_binaries_list = opts.ensure_installed
     end,
   },
 

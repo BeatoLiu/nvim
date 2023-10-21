@@ -8,36 +8,41 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 -- -- set termguicolors to enable highlight groups
 opt.termguicolors = true
-opt.showmode=false
+opt.showmode = false
 
-opt.clipboard="unnamedplus"
-opt.cursorline=true
+opt.clipboard = "unnamedplus"
+opt.cursorline = true
 
-opt.expandtab=true
-opt.shiftwidth=2
-opt.smartindent=true
-opt.tabstop=2
-opt.softtabstop=2
+opt.expandtab = true
+opt.shiftwidth = 2
+opt.smartindent = true
+opt.tabstop = 2
+opt.softtabstop = 2
 
-opt.fillchars={eob=" "}
-opt.ignorecase=true
-opt.smartcase=true
+opt.fillchars = { eob = " " }
+opt.ignorecase = true
+opt.smartcase = true
 
-opt.number=true
-opt.numberwidth=2
+opt.number = true
+opt.numberwidth = 2
 
-opt.termguicolors=true
+opt.termguicolors = true
 
-vim.wo.foldmethod = 'expr'
-vim.wo.foldlevel =1
-vim.go.foldlevelstart=99
-vim.wo.foldexpr="nvim_treesitter#foldexpr()"
+vim.wo.foldmethod = "expr"
+vim.wo.foldlevel = 1
+vim.go.foldlevelstart = 99
+vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- disable some default providers
-for _, provider in ipairs { "node", "perl",  "ruby" } do
+for _, provider in ipairs({ "node", "perl", "ruby" }) do
   g["loaded_" .. provider .. "_provider"] = 0
 end
 
+-- 切换buffer
+for i = 1, 9, 1 do
+  vim.keymap.set("n", string.format("<leader>%s", i), string.format("<Cmd>BufferLineGoToBuffer %s<CR>", i))
+end
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.fn.stdpath "data" .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH

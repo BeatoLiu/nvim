@@ -30,7 +30,7 @@ M.general = {
     ["<C-c>"] = { "<cmd> %y+ <CR>", "Copy whole file" },
 
     -- line numbers
- --   ["<leader>n"] = { "<cmd> set nu! <CR>", "Toggle line number" },
+    --   ["<leader>n"] = { "<cmd> set nu! <CR>", "Toggle line number" },
     ["<leader>rn"] = { "<cmd> set rnu! <CR>", "Toggle relative number" },
 
     -- Allow moving the cursor through wrapped lines with j, k, <Up> and <Down>
@@ -48,7 +48,7 @@ M.general = {
 
     ["<leader>fm"] = {
       function()
-        vim.lsp.buf.format { async = true }
+        vim.lsp.buf.format({ async = true })
       end,
       "LSP formatting",
     },
@@ -72,9 +72,37 @@ M.general = {
   },
 }
 
-M.tabufline = {
+M.bufferline = {
   plugin = true,
 
+  n = {
+    -- cycle through buffers
+    ["<tab>"] = {
+      "<cmd> BufferLineCycleNext<CR>",
+      "Goto next buffer",
+    },
+
+    -- ["<leader>b"] = { "<cmd> enew <CR>", "New buffer" },
+    ["<S-tab>"] = {
+      "<cmd> BufferLineCyclePrev<CR>",
+      "Goto prev buffer",
+    },
+
+    -- close current buffer + hide terminal buffer
+    ["<leader>xc"] = {
+      "<cmd> bdelete<CR>",
+      "Close current buffer",
+    },
+    ["<leader>xo"] = {
+      "<cmd> BufferLineCloseOthers<CR>",
+      "Close all other visible buffers",
+    },
+
+    ["<leader>0"] = {
+      "<cmd> BufferLineGoToBuffer -1<CR>",
+      "move to the last buffer",
+    },
+  },
 }
 
 M.comment = {
@@ -146,12 +174,12 @@ M.lspconfig = {
       "LSP definition type",
     },
 
-    ["<leader>ra"] = {
-      function()
-        require("nvchad.renamer").open()
-      end,
-      "LSP rename",
-    },
+    -- ["<leader>ra"] = {
+    --   function()
+    --     require("nvchad.renamer").open()
+    --   end,
+    --   "LSP rename",
+    -- },
 
     ["<leader>ca"] = {
       function()
@@ -169,21 +197,21 @@ M.lspconfig = {
 
     ["<leader>f"] = {
       function()
-        vim.diagnostic.open_float { border = "rounded" }
+        vim.diagnostic.open_float({ border = "rounded" })
       end,
       "Floating diagnostic",
     },
 
     ["[d"] = {
       function()
-        vim.diagnostic.goto_prev { float = { border = "rounded" } }
+        vim.diagnostic.goto_prev({ float = { border = "rounded" } })
       end,
       "Goto prev",
     },
 
     ["]d"] = {
       function()
-        vim.diagnostic.goto_next { float = { border = "rounded" } }
+        vim.diagnostic.goto_next({ float = { border = "rounded" } })
       end,
       "Goto next",
     },
@@ -256,20 +284,19 @@ M.telescope = {
   },
 }
 
-
 M.whichkey = {
   plugin = true,
 
   n = {
     ["<leader>wK"] = {
       function()
-        vim.cmd "WhichKey"
+        vim.cmd("WhichKey")
       end,
       "Which-key all keymaps",
     },
     ["<leader>wk"] = {
       function()
-        local input = vim.fn.input "WhichKey: "
+        local input = vim.fn.input("WhichKey: ")
         vim.cmd("WhichKey " .. input)
       end,
       "Which-key query lookup",
@@ -290,7 +317,7 @@ M.blankline = {
 
         if ok then
           vim.api.nvim_win_set_cursor(vim.api.nvim_get_current_win(), { start, 0 })
-          vim.cmd [[normal! _]]
+          vim.cmd([[normal! _]])
         end
       end,
 
