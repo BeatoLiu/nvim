@@ -1,5 +1,7 @@
-require("opts")
-require("utils").load_mappings()
+-- require("config.autocmds")
+require("config.options")
+require("config.maps")
+-- require("config.autocmds")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -15,4 +17,4 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("plugins")
+require("lazy_nvim")

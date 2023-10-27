@@ -1,41 +1,44 @@
-local null_ls = require "null-ls"
--- local cspell = require "cspell"
+return {
+	-- "nvimtools/none-ls.nvim",
+	"jose-elias-alvarez/null-ls.nvim",
+	-- enabled = false,
+	event = { "BufReadPre", "BufNewFile" },
+	dependencies = { "mason.nvim" },
+	config = function()
+		local nls = require("null-ls")
+		table.insert(nls.builtins.formatting.shfmt.filetypes, "zsh")
+		local sources = {
+			-- nls.builtins.formatting.prettierd,
+			nls.builtins.diagnostics.flake8.with({ extra_args = { "--max-line-length", "120" } }),
+			-- nls.builtins.formatting.gofmt,
+			-- nls.builtins.formatting.shfmt,
+			nls.builtins.formatting.clang_format.with({ filetypes = { "c", "cpp" } }),
+			nls.builtins.formatting.rustfmt,
 
-local b = null_ls.builtins
-
--- local cspell_config = vim.fn.expand "E:/cspell.json"
--- local shared_config = {
---   find_json = function()
---     return cspell_config
---   end,
--- }
-
-local sources = {
-
-  -- web dev stuff
-  -- b.diagnostics.deno_lint,
-  -- b.diagnostics.stylelint.with { filetypes = { "html", "css", "less", "scss", "sass", "vue" } },
-  -- b.formatting.deno_fmt, -- choosed deno for ts/js files cuz its very fast!
-  -- b.formatting.prettier,
-  -- b.code_actions.eslint_d,
-  -- b.formatting.prettier.with { filetypes = { "html", "markdown", "css", "vue","js","tsx","ts" } }, -- so prettier works only on these filetypes
-
-  -- Lua
-  b.formatting.stylua,
-
-  -- cpp
-  b.formatting.clang_format, --.with { filetypes = { "c", "cpp" } },
-
-  --  cspell太卡
-  -- cspell.diagnostics.with {
-  --   config = shared_config,
-  -- },
-  -- cspell.code_actions.with {
-  --   config = shared_config,
-  -- },
-}
-
-null_ls.setup {
-  debug = true,
-  sources = sources,
+			nls.builtins.formatting.prettier,
+			-- nls.builtins.formatting.isort.with({
+			--   extra_args = {
+			--     "--line-length=120",
+			--   },
+			-- }),
+			-- nls.builtins.formatting.black.with({
+			--   extra_args = {
+			--     "--line-length=120",
+			--   },
+			-- }),
+			nls.builtins.formatting.sql_formatter,
+			nls.builtins.formatting.stylua.with({
+				extra_args = {
+					"--indent-type=Spaces",
+					"--indent-width=2",
+				},
+			}),
+			-- nls.builtins.code_actions.gomodifytags,
+			-- nls.builtins.code_actions.impl,
+			-- nls.builtins.formatting.gofumpt,
+			-- nls.builtins.formatting.goimports_reviser,
+			-- nls.builtins.diagnostics.hadolint, -- for dockerfile
+		}
+		nls.setup({ sources = sources })
+	end,
 }

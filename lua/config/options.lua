@@ -39,10 +39,24 @@ for _, provider in ipairs({ "node", "perl", "ruby" }) do
 end
 
 -- 切换buffer
-for i = 1, 9, 1 do
-  vim.keymap.set("n", string.format("<leader>%s", i), string.format("<Cmd>BufferLineGoToBuffer %s<CR>", i))
-end
+-- for i = 1, 9, 1 do
+--   vim.keymap.set("n", string.format("<leader>%s", i), string.format("<Cmd>BufferLineGoToBuffer %s<CR>", i))
+-- end
 -- add binaries installed by mason.nvim to path
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
 vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+
+-- custmo config
+local options = {}
+options.transparent = false
+options.float_border = true
+options.show_winbar = true
+
+-- auto command manager
+options.auto_save = false
+options.auto_reload = false
+options.auto_switch_input = true
+options.auto_restore_cursor_position = true
+options.auto_remove_new_lines_comment = true
+return options
