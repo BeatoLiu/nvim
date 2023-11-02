@@ -26,8 +26,6 @@ opt.smartcase = true
 opt.number = true
 opt.numberwidth = 2
 
-opt.termguicolors = true
-
 vim.wo.foldmethod = "expr"
 vim.wo.foldlevel = 1
 vim.go.foldlevelstart = 99
@@ -46,6 +44,11 @@ end
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
 vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
+
+-- 为lsp.buf.hover()增加边框
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = "single",
+})
 
 -- custmo config
 local options = {}

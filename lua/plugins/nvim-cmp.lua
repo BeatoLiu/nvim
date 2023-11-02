@@ -152,7 +152,7 @@ return {
 						source = "tabnine"
 					end
 					item.kind = string.format(" %s", icons[item.kind], item.kind)
-					item.menu = string.format(" (%s)", string.upper(source))
+					-- item.menu = string.format(" (%s)", string.upper(source))
 					return item
 				end,
 			},

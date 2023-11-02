@@ -75,6 +75,7 @@ return {
     -- lsp_servers.tailwindcss = { filetypes_exclude = { "markdown" } }
     -- lsp_servers.dockerls = {}
     -- lsp_servers.docker_compose_language_service = {}
+    lspconfig.rust_analyzer.setup{}
     lspconfig.lua_ls.setup({
       settings = {
         Lua = {

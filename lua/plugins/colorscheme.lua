@@ -2,19 +2,27 @@ return {
   {
     "folke/tokyonight.nvim",
     lazy = false,
-		priority = 1000, -- make sure to load this before all the other start plugins
-    opts = {
-      style = "moon",
-      transparent = false,
-      styles = {
-        sidebars = "transparent",
-        floats = "transparent",
-      },
-    },
-		config = function()
-			-- load the colorscheme here
-			vim.cmd([[colorscheme tokyonight]])
-		end,
+    priority = 1000, -- make sure to load this before all the other start plugins
+    -- opts = {
+    -- },
+    config = function()
+      require('tokyonight').setup({
+
+        style = "storm",
+        transparent = false,
+        styles = {
+          sidebars = "transparent",
+          floats = "transparent",
+          keywords = { italic = false },
+          comments = { italic = false },
+        },
+        on_colors = function(colors)
+          colors.error = "#ff004a"
+        end
+      })
+      -- load the colorscheme here
+      vim.cmd([[colorscheme tokyonight]])
+    end,
   },
   {
     "catppuccin/nvim",
